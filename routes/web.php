@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\DeviceController;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('index');
-});
+
+// Route::get('/', function () {
+//     return view('index');
+// });
+
+Route::get('/', [DeviceController::class, 'index'])->name('device.index');
+Route::post('/toggle', [DeviceController::class, 'toggle'])->name('device.toggle');
+

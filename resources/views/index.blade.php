@@ -96,7 +96,6 @@
     </div>
 
 
-
         <script>
             function toggleObject(object, state) {
                     const statusElement = document.getElementById(`${object.toLowerCase()}-status`);
