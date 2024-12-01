@@ -5,125 +5,197 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SmartHome Control</title>
-    <!-- Minimized CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-
-        .card i {
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover i {
-            transform: scale(1.2);
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 </head>
+
+<style>
+    body {
+        background-color: #f8f9fa;
+        font-family: "Arial", sans-serif;
+        color: #333;
+    }
+
+    .navbar {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-brand {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #ffffff;
+    }
+
+    .navbar-brand span {
+        color: #c82333;
+    }
+
+    h1 {
+        font-weight: bold;
+        color: #333;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 30px;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+        transition: transform 0.2s ease, box-shadow 0.3s ease;
+        background-color: #ffffff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-success:hover,
+    .btn-danger:hover {
+        transform: scale(1.05);
+    }
+
+    .status-text {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-top: 10px;
+        color: #28a745;
+    }
+
+    .status-text.off {
+        color: #dc3545;
+    }
+
+</style>
 
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
+        <div class="container">
             <a class="navbar-brand" href="#">Smart<span>Home</span></a>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <div class="container py-4">
-        <h1 class="text-center mb-4">SmartHome Control</h1>
-        <div class="row g-3">
-            <!-- Lamp -->
-            <div class="col-sm-6 col-md-4">
-                <div class="card text-center shadow-sm">
-                    <div class="card-body">
-                        <i class="bi bi-lightbulb fs-1 text-warning" id="lamp-icon"></i>
-                        <h5 class="card-title mt-3">Lamp</h5>
-                        <p id="lamp-status" class="text-muted">Status: Off</p>
-                        <button onclick="toggleObject('Lamp', 'on')" class="btn btn-success">Turn On</button>
-                        <button onclick="toggleObject('Lamp', 'off')" class="btn btn-danger">Turn Off</button>
+    <div class="container mt-5">
+        <h1 class="text-center">Device Control Panel</h1>
+
+        <!-- Row 1 -->
+        <div class="row mt-4">
+            <!-- LED -->
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        <i class="bi bi-lightbulb" style="font-size: 2.5rem; color: #555;"></i>
+                        <h5 class="card-title mt-3">LED</h5>
+                        <div id="status-led" class="status-text">
+                            Kela mang...
+                        </div>
+                        <form method="POST" action="{{ route('control') }}">
+                            @csrf
+                            <input type="hidden" name="device" value="led">
+                            <button type="submit" name="status" value="on" class="btn btn-success me-2">Turn On</button>
+                            <button type="submit" name="status" value="off" class="btn btn-danger">Turn Off</button>
+                        </form>
                     </div>
                 </div>
             </div>
-
-            <!-- Fan -->
-            <div class="col-sm-6 col-md-4">
-                <div class="card text-center shadow-sm">
-                    <div class="card-body">
-                        <i class="bi bi-fan fs-1 text-primary" id="fan-icon"></i>
-                        <h5 class="card-title mt-3">Fan</h5>
-                        <p id="fan-status" class="text-muted">Status: Off</p>
-                        <button onclick="toggleObject('Fan', 'on')" class="btn btn-success">Turn On</button>
-                        <button onclick="toggleObject('Fan', 'off')" class="btn btn-danger">Turn Off</button>
-                    </div>
-                </div>
-            </div>
-
             <!-- TV -->
-            <div class="col-sm-6 col-md-4">
-                <div class="card text-center shadow-sm">
-                    <div class="card-body">
-                        <i class="bi bi-tv-fill fs-1 text-dark" id="tv-icon"></i>
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        <i class="bi bi-tv" style="font-size: 2.5rem; color: #555;"></i>
                         <h5 class="card-title mt-3">TV</h5>
-                        <p id="tv-status" class="text-muted">Status: Off</p>
-                        <button onclick="toggleObject('TV', 'on')" class="btn btn-success">Turn On</button>
-                        <button onclick="toggleObject('TV', 'off')" class="btn btn-danger">Turn Off</button>
+                        <div id="status-tv" class="status-text">Kela mang...</div>
+                        <form method="POST" action="{{ route('control') }}">
+                            @csrf
+                            <input type="hidden" name="device" value="tv">
+                            <button type="submit" name="status" value="on" class="btn btn-success me-2">Turn On</button>
+                            <button type="submit" name="status" value="off" class="btn btn-danger">Turn Off</button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="status-container" class="mt-4">
-            <h3>Device Status:</h3>
-            <p id="loading-text">Loading...</p>
+        <!-- Row 2 -->
+        <div class="row">
+            <!-- AC -->
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        <i class="bi bi-snow" style="font-size: 2.5rem; color: #555;"></i>
+                        <h5 class="card-title mt-3">AC</h5>
+                        <div id="status-ac" class="status-text">Kela mang...</div>
+                        <form method="POST" action="{{ route('control') }}">
+                            @csrf
+                            <input type="hidden" name="device" value="ac">
+                            <button type="submit" name="status" value="on" class="btn btn-success me-2">Turn On</button>
+                            <button type="submit" name="status" value="off" class="btn btn-danger">Turn Off</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Air Purifier -->
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        <i class="bi bi-wind" style="font-size: 2.5rem; color: #555;"></i>
+                        <h5 class="card-title mt-3">Air Purifier</h5>
+                        <div id="status-airpurifier" class="status-text">Kela mang...</div>
+                        <form method="POST" action="{{ route('control') }}">
+                            @csrf
+                            <input type="hidden" name="device" value="airpurifier">
+                            <button type="submit" name="status" value="on" class="btn btn-success me-2">Turn On</button>
+                            <button type="submit" name="status" value="off" class="btn btn-danger">Turn Off</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="row">
+            <!-- Fan -->
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-fan" style="font-size: 2.5rem; color: #555;"></i>
+                        <h5 class="card-title mt-3">Fan</h5>
+                        <div id="status-fan" class="status-text">Kela mang...</div>
+                        <form method="POST" action="{{ route('control') }}">
+                            @csrf
+                            <input type="hidden" name="device" value="fan">
+                            <button type="submit" name="status" value="on" class="btn btn-success me-2">Turn On</button>
+                            <button type="submit" name="status" value="off" class="btn btn-danger">Turn Off</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
-        function toggleObject(object, state) {
-            const statusElement = document.getElementById(`${object.toLowerCase()}-status`);
-            const iconElement = document.getElementById(`${object.toLowerCase()}-icon`);
-
-            // Update status
-            if (state === 'on') {
-                statusElement.textContent = 'Status: On';
-                statusElement.classList.remove('text-muted');
-                statusElement.classList.add('text-success');
-            } else {
-                statusElement.textContent = 'Status: Off';
-                statusElement.classList.remove('text-success');
-                statusElement.classList.add('text-muted');
-            }
-
-            // Update icon style
-            if (object === 'Fan') {
-                iconElement.classList.toggle('animate-spin', state === 'on');
-            }
-        }
-
         function fetchStatus() {
-            // Replace with your Laravel route
-            const url = "{{ route('getStatus') }}";
-
-            $.get(url, function (data) {
-                let statusHtml = '<h3>Device Status:</h3><ul class="list-group">';
-                $.each(data, function (device, status) {
-                    statusHtml += `<li class="list-group-item">${device.toUpperCase()}: ${status}</li>`;
-                });
-                statusHtml += '</ul>';
-                $('#status-container').html(statusHtml);
-            }).fail(function () {
-                $('#status-container').html('<p>Error fetching status</p>');
+            $.ajax({
+                url: "{{ route('getStatus') }}",
+                method: "GET",
+                success: function (data) {
+                    $.each(data, function (device, status) {
+                        let statusText = status.toUpperCase();
+                        let statusClass = status === "on" ? "status-text" : "status-text off";
+                        $(`#status-${device}`).text(statusText).attr("class", statusClass);
+                    });
+                }
             });
         }
 
-        // Update status every 10 seconds
-        setInterval(fetchStatus, 10000);
+        setInterval(fetchStatus, 5000);
         fetchStatus();
     </script>
 </body>

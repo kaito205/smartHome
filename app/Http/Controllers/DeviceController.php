@@ -6,16 +6,15 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Http;
 
-class DeviceController extends Controller
-{private $arduinoUrl = 'http://192.168.20.200'; // Ganti dengan IP NodeMCU Anda
+class DeviceController extends Controller {
 
-    public function index()
-    {
+    private $arduinoUrl = 'http://192.168.113.200'; // Ganti dengan IP NodeMCU Anda
+
+    public function index() {
         return view('index');
     }
 
-    public function control(Request $request)
-    {
+    public function control(Request $request) {
         $device = $request->input('device');
         $status = $request->input('status');
 
@@ -27,8 +26,7 @@ class DeviceController extends Controller
         return back()->with('message', 'Device control request sent!');
     }
 
-    public function getStatus(Request $request)
-    {
+    public function getStatus(Request $request) {
         // Ambil status dari NodeMCU
         $response = Http::get($this->arduinoUrl . "/status");
 
