@@ -2,40 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Device;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Http;
+
 class DeviceController extends Controller
-{
+{private $arduinoUrl = 'http://192.168.20.200'; // Ganti dengan IP NodeMCU Anda
+
     public function index()
     {
-        $devices = [
-            (object) ['name' => 'Lamp', 'status' => 'off'],
-            (object) ['name' => 'Fan', 'status' => 'off'],
-            (object) ['name' => 'TV', 'status' => 'off'],
-            (object) ['name' => 'Heater', 'status' => 'off'],
-            (object) ['name' => 'AC', 'status' => 'off'],
-        ];
-        return view('index', compact('devices'));
+        return view('index');
     }
 
-
-
-    // Mengubah status perangkat
-    public function toggle(Request $request)
+    public function control(Request $request)
     {
-        $device = $request->input('object'); // Nama perangkat
-        $state = $request->input('state');  // Status perangkat
+        $device = $request->input('device');
+        $status = $request->input('status');
 
-        // Validasi input
-        if (!in_array($device, ['Lamp', 'Fan', 'TV', 'Heater', 'AC']) || !in_array($state, ['on', 'off'])) {
-            return response()->json(['message' => 'Invalid device or state'], 400);
-        }
+        $response = Http::get($this->arduinoUrl . "/control", [
+            'device' => $device,
+            'status' => $status
+        ]);
 
-        // Simpan status perangkat (opsional: gunakan database untuk persistensi)
-        // Contoh penyimpanan sementara
-        session([$device => $state]);
+        return back()->with('message', 'Device control request sent!');
+    }
 
-        return response()->json(['message' => "{$device} turned {$state}"], 200);
+    public function getStatus(Request $request)
+    {
+        // Ambil status dari NodeMCU
+        $response = Http::get($this->arduinoUrl . "/status");
+
+        return response()->json($response->json());
     }
 }

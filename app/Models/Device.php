@@ -9,5 +9,12 @@ class Device extends Model
 {
     use HasFactory;
 
+
+    // Definisikan kolom yang bisa diisi (fillable)
     protected $fillable = ['name', 'status'];
+
+    // Tipe data untuk kolom
+    protected $casts = [
+        'status' => 'boolean',
+    ];
 }

@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 //     return view('index');
 // });
 
-Route::get('/', [DeviceController::class, 'index'])->name('device.index');
-Route::post('/toggle', [DeviceController::class, 'toggle'])->name('device.toggle');
 
+Route::get('/', [DeviceController::class, 'index']);
+Route::post('/control', [DeviceController::class, 'control'])->name('control');
+Route::get('/status', [DeviceController::class, 'getStatus'])->name('getStatus');

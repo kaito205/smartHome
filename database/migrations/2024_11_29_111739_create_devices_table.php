@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('devices', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // Nama objek (Lamp, Fan, TV, dll.)
-            $table->enum('status', ['on', 'off'])->default('off');
+            $table->string('name')->unique(); // Nama objek (Lamp, Fan, TV, dll.)
+            $table->boolean('status')->default(false);
             $table->timestamps();
         });
     }
