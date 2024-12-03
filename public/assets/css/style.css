@@ -34,15 +34,6 @@ h1 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-.btn-success:hover,
-.btn-danger:hover {
-    transform: scale(1.05);
-}
 
 .status-text {
     font-size: 1.2rem;

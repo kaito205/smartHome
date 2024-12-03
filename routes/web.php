@@ -23,4 +23,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [DeviceController::class, 'index']);
 Route::post('/control', [DeviceController::class, 'control'])->name('control');
+Route::post('/notify', [DeviceController::class, 'receiveNotification']);
 Route::get('/status', [DeviceController::class, 'getStatus'])->name('getStatus');

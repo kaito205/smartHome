@@ -32,4 +32,12 @@ class DeviceController extends Controller {
 
         return response()->json($response->json());
     }
+
+    public function receiveNotification(Request $request)
+    {
+        $device = $request->input('device');
+        // Simpan pemberitahuan ke session atau database
+        session()->flash('notification', "Perangkat $device menyala lebih dari 2 menit.");
+        return response()->json(['status' => 'success']);
+    }
 }
